@@ -99,21 +99,49 @@ public class Matrizes {
         return newImage;
     }
     
-    public BufferedImage getRotate() {
+    public BufferedImage getTranslate() {
+        int TRANSLATE_SIZE = 200;
         int height = this.imageOrigin.getHeight();
         int width = this.imageOrigin.getWidth();
-        BufferedImage newImage = new BufferedImage(height, width, BufferedImage.TYPE_INT_RGB);
+        int widthWithTranslate = width + TRANSLATE_SIZE;
+        int heightWithTranslate = height + TRANSLATE_SIZE;
+        BufferedImage newImage = new BufferedImage(widthWithTranslate, heightWithTranslate, BufferedImage.TYPE_INT_RGB);
         
-         for (int x = 0; x < width; x++) {
+        for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 int pixel =  this.imageOrigin.getRGB(x, y);
-                int newImageHeight = newImage.getHeight();
-                int destinyPositionY = newImageHeight - x - 1;
+                int destinyPositionX = x + TRANSLATE_SIZE;
+                int destinyPositionY = y + TRANSLATE_SIZE;
                 
-                newImage.setRGB(y, destinyPositionY, pixel);
+                newImage.setRGB(destinyPositionX, destinyPositionY, pixel);
             }
         }
         
+        return newImage;
+    }
+    
+    public BufferedImage getRotate() {
+        double degrees = 90.0;
+        double radians = Math.toRadians(degrees);
+        double sen = Math.sin(radians);
+        double cos = Math.cos(radians);
+        int height = this.imageOrigin.getHeight();
+        int width = this.imageOrigin.getWidth();
+        
+        BufferedImage newImage = new BufferedImage(height, width, BufferedImage.TYPE_INT_RGB);
+        
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                int pixel =  this.imageOrigin.getRGB(x, y);
+                double destinyPositionXDouble = x * cos - y * sen;
+                double destinyPositionYDouble = x * sen + y * cos;
+                int destinyPositionX = (int) destinyPositionXDouble;
+                int destinyPositionY = (int) destinyPositionYDouble;
+                
+                newImage.setRGB(Math.abs(destinyPositionX), Math.abs(destinyPositionY), pixel);
+            }
+        }
+         
         return newImage;
     }
     
